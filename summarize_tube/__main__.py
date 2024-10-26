@@ -19,7 +19,7 @@ def main(video_id: str):
     title_and_description = gen_summary_from_transcript(transcript)
     summary = struct_summary(title_and_description)
 
-    logger.info(f"Title and description:\n{summary}")
+    logger.info(f"Title and description:\n{summary.model_dump_json(indent=3)}")
 
 
 def run():

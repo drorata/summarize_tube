@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "summarize-tube"
+version = "0.1.0"
+description = "Generate title and descriptions for YouTube videos"
+authors = ["Dror Atariah <drorata@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+typer = "^0.12.5"
+loguru = "^0.7.2"
+youtube-transcript-api = "^0.6.2"
+pydantic = "^2.9.2"
+pydantic-settings = "^2.6.0"
+openai = "^1.52.2"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+black = "^24.10.0"
+isort = "^5.13.2"
+flake8 = "^7.1.1"
+mypy = "^1.13.0"
+
+[tool.poetry.scripts]
+stube = 'summarize_tube.__main__:run'
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

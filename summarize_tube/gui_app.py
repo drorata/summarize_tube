@@ -1,5 +1,6 @@
 import streamlit as st
 from loguru import logger
+
 from summarize_tube import utils
 from summarize_tube.models import SummeryTube, configure_prompts_of_fields
 
@@ -49,7 +50,8 @@ if video_id:
                 st.session_state.transcript = utils.get_full_transcription(video_id)
             except Exception as e:
                 st.error(
-                    "Failed to retrieve the transcript. Please check the video ID and try again."
+                    "Failed to retrieve the transcript. "
+                    "Please check the video ID and try again."
                 )
                 logger.error(
                     f"Error retrieving transcript for video ID {video_id}: {e}"

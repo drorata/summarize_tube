@@ -5,19 +5,19 @@ class SummeryTube(BaseModel):
     title: str = Field(
         description="The title of the video",
         prompt=(  # pyright: ignore
-            "a title of at most 60 characters based on the transcript"
+            "A title of at most 60 characters based on the transcript"
         ),
     )
     description: str = Field(
         description="The description of the video",
         prompt=(  # pyright: ignore
-            "a description for the video of at most "
+            "A description for the video of at most "
             "250 characters based on the transcript"
         ),
     )
     hashtags: list[str] = Field(
         description="The hashtags for the video",
-        prompt="a list of 12 hashtags recommended for the video",  # pyright: ignore
+        prompt="A list of 12 hashtags recommended for the video",  # pyright: ignore
     )
 
     @classmethod

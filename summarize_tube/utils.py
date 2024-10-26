@@ -1,4 +1,5 @@
 import json
+from typing import Type
 
 from openai import OpenAI
 from youtube_transcript_api import YouTubeTranscriptApi
@@ -17,6 +18,28 @@ def get_full_transcription(video_id: str, language: str = "en") -> str:
     return res
 
 
+def construct_prompt(model: Type[SummeryTube], transcript: str) -> str:
+    intro = """You are a marketing and youtube specialist.
+    You will be given a transcript of a youtube video.
+    Based on the transcription you must generate the following fields in a
+    JSON format:
+
+    """
+    fields_prompts = json.dumps(SummeryTube.construct_prompt_for_fields_as_dict())
+
+    return (
+        intro
+        + "\n"
+        + fields_prompts
+        + f"""
+
+    The transcript is:
+
+    {transcript}
+"""
+    )
+
+
 def gen_summary_from_transcript(
     transcript: str,
     title_max_len: int = 60,
@@ -29,30 +52,7 @@ def gen_summary_from_transcript(
         api_key=settings.openai_api_key
     )
 
-    prompt = (
-        f"""You are a marketing and youtube specialist.
-    You will be given a transcript of a youtube video.
-    Based on the transcription you must generate the following details:
-
-    - a title of at most {title_max_len} characters
-    - a description for the video of at most {description_max_len} characters
-    - a list of 12 hashtags recommended for the video
-
-    """
-        + """
-    You should only a valid json object of the following schema:
-    {
-        "title": <generated title>,
-        "description": <generated description>,
-        "hashtags": <list of comma separated suggested hashtags>
-    }
-    """
-        + f"""
-    The transcript is:
-
-    {transcript}
-    """
-    )
+    prompt = construct_prompt(SummeryTube, transcript=transcript)
 
     chat_completion = client.chat.completions.create(
         response_format={"type": "json_object"},
@@ -76,14 +76,4 @@ def struct_summary(summery: str | None) -> SummeryTube:
         raise ValueError("Summery is None")
 
     raw_summary_json = json.loads(summery)
-
-    hashtags = [
-        "#" + x.strip() for x in raw_summary_json["hashtags"].split("#") if x != ""
-    ]
-    res_dict_final = {}
-    for k, v in raw_summary_json.items():
-        if k != "hashtags":
-            res_dict_final[k] = v
-    res_dict_final["hashtags"] = hashtags
-
-    return SummeryTube(**res_dict_final)
+    return SummeryTube(**raw_summary_json)

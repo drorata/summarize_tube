@@ -1,6 +1,5 @@
-import json
-
 from openai import OpenAI
+import json
 from youtube_transcript_api import YouTubeTranscriptApi
 
 from summarize_tube.models import SummeryTube

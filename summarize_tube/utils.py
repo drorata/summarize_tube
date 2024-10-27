@@ -2,6 +2,7 @@ import json
 from typing import Type
 from urllib.parse import parse_qs, urlparse
 
+from loguru import logger
 from openai import OpenAI
 from youtube_transcript_api import YouTubeTranscriptApi
 
@@ -68,8 +69,6 @@ def construct_prompt(model: Type[SummeryTube], transcript: str) -> str:
 
 def gen_summary_from_transcript(
     transcript: str,
-    title_max_len: int = 60,
-    description_max_len=150,
     model: str = "gpt-3.5-turbo",
 ) -> str | None:
     settings = Settings()  # pyright: ignore
@@ -97,7 +96,7 @@ def gen_summary_from_transcript(
 
 
 def struct_summary(summery: str | None) -> SummeryTube:
-
+    logger.info(f"About to structure the following summary:\n{summery}")
     if summery is None:
         raise ValueError("Summery is None")
 

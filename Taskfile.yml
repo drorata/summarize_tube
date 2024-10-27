@@ -7,6 +7,6 @@ tasks:
       - poetry run flake8 .
       - poetry run isort -c --df .
 
-  run_test:
+  run_tests:
     cmds:
       - poetry run pytest ./summarize_tube/tests

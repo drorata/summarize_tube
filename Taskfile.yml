@@ -6,3 +6,7 @@ tasks:
       - poetry run black --check --preview .
       - poetry run flake8 .
       - poetry run isort -c --df .
+
+  run_test:
+    cmds:
+      - poetry run pytest ./summarize_tube/tests

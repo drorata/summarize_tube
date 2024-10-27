@@ -18,6 +18,14 @@ st.sidebar.write(
     """
 )
 
+
+def reset_session_state() -> None:
+    st.session_state.transcript = None
+    st.session_state.summary = None
+    st.session_state.transcript_confirmed = False
+    st.session_state.prompt_confirmed = False
+
+
 # Initialize session state for each step
 if "video_url" not in st.session_state:
     st.session_state.video_url = ""
@@ -35,6 +43,7 @@ video_url = st.text_input(
     "URL of YouTube Video to process:",
     st.session_state.video_url,
     help="Paste here the URL of the YouTube video you want to summarize",
+    on_change=reset_session_state,
 )
 
 

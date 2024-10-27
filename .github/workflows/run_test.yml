@@ -6,32 +6,16 @@ on:
       - main
 
 jobs:
+  setup:
+    uses: ./.github/workflows/setup-env.yml
+
   test:
-    name: Run tests
+    needs: setup
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.12
-
-      - name: Install Task
-        uses: arduino/setup-task@v1
-        with:
-          version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-
-      - name: Install dependencies
-        run: |
-          poetry install
-
-      - name: Run lint test
-        run: |
-          task run_tests
+      - name: Run tests
+        run: task run_tests

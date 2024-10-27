@@ -106,3 +106,5 @@ if st.session_state.transcript_confirmed:
             for field in st.session_state.summary.model_fields:
                 st.write(f"### {field.capitalize()}")
                 st.write(getattr(st.session_state.summary, field))
+            st.session_state.prompt_confirmed = False
+            st.session_state.summary = None

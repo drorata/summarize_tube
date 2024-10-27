@@ -19,8 +19,8 @@ st.sidebar.write(
 )
 
 # Initialize session state for each step
-if "video_id" not in st.session_state:
-    st.session_state.video_id = ""
+if "video_url" not in st.session_state:
+    st.session_state.video_url = ""
 if "transcript" not in st.session_state:
     st.session_state.transcript = None
 if "summary" not in st.session_state:
@@ -31,19 +31,20 @@ if "prompt_confirmed" not in st.session_state:
     st.session_state.prompt_confirmed = False
 
 # Step 1: Input YouTube Video ID
-video_id = st.text_input(
-    "Enter YouTube Video ID",
-    st.session_state.video_id,
-    help="Paste here the ID of the YouTube video you want to summarize",
+video_url = st.text_input(
+    "URL of YouTube Video to process:",
+    st.session_state.video_url,
+    help="Paste here the URL of the YouTube video you want to summarize",
 )
 
-if video_id:
-    st.session_state.video_id = video_id
+
+if video_url:
+    st.session_state.video_url = video_url
+    video_id = utils.get_video_id(video_url)
     st.video(data=f"https://www.youtube.com/watch?v={video_id}")
     if st.button("🚀 Click here if this is the video you want to process"):
         logger.info(f"Processing video with ID: {video_id}")
         st.write("Fetching transcript...")
-
         # Fetch the transcript if it hasn't been fetched yet
         if st.session_state.transcript is None:
             try:

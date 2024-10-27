@@ -1,11 +1,37 @@
 import json
 from typing import Type
+from urllib.parse import parse_qs, urlparse
 
 from openai import OpenAI
 from youtube_transcript_api import YouTubeTranscriptApi
 
 from summarize_tube.models import SummeryTube
 from summarize_tube.settings import Settings
+
+
+def get_video_id(video_url) -> str:
+    """
+    Examples:
+    - http://youtu.be/SA2iWivDJiE
+    - http://www.youtube.com/watch?v=_oPAwA_Udwc&feature=feedu
+    - http://www.youtube.com/embed/SA2iWivDJiE
+    - http://www.youtube.com/v/SA2iWivDJiE?version=3&amp;hl=en_US
+
+    Original code from: https://stackoverflow.com/a/7936523/671013
+    """
+    query = urlparse(video_url)
+    if query.hostname == "youtu.be":
+        return query.path[1:]
+    if query.hostname in ("www.youtube.com", "youtube.com"):
+        if query.path == "/watch":
+            p = parse_qs(query.query)
+            return p["v"][0]
+        if query.path[:7] == "/embed/":
+            return query.path.split("/")[2]
+        if query.path[:3] == "/v/":
+            return query.path.split("/")[2]
+
+    raise ValueError("Invalid YouTube URL")
 
 
 def get_full_transcription(video_id: str, language: str = "en") -> str:

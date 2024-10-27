@@ -6,7 +6,10 @@ def test_main():
 
     assert prompt == {
         "title": "A title of at most 60 characters based on the transcript",
-        "description": "A description for the video of at most 250 characters based on the transcript",
+        "description": (
+            "A description for the video of at most "
+            "250 characters based on the transcript"
+        ),
         "hashtags": "A list of 12 hashtags recommended for the video",
     }
 

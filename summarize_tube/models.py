@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field
+import re
+
+from pydantic import BaseModel, Field, field_validator
 
 
 class SummeryTube(BaseModel):
@@ -19,6 +21,15 @@ class SummeryTube(BaseModel):
         description="The hashtags for the video",
         prompt="A list of 12 hashtags recommended for the video",  # pyright: ignore
     )
+
+    @field_validator("hashtags", mode="before")
+    def validate_hashtags(cls, hashtags: list[str] | str) -> list[str]:
+        if isinstance(hashtags, str):
+            hashtags = [item for item in re.split(r"[,\s]+", hashtags) if item]
+        hashtags = [
+            hashtag if hashtag[0] == "#" else "#" + hashtag for hashtag in hashtags
+        ]
+        return hashtags
 
     @classmethod
     def construct_prompt_for_fields_as_dict(cls, **kwargs) -> dict[str, str]:

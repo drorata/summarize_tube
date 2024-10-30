@@ -45,4 +45,9 @@ def configure_prompts_of_fields(**kwargs) -> None:
     for k in kwargs:
         if k not in SummeryTube.model_fields:
             raise ValueError(f"Field {k} not found in SummeryTube model")
-        SummeryTube.model_fields[k].json_schema_extra["prompt"] = kwargs[k]
+        json_schema_extra = SummeryTube.model_fields[k].json_schema_extra
+
+        if not isinstance(json_schema_extra, dict):
+            raise ValueError(f"Field {k} has no json_schema_extra")
+
+        json_schema_extra["prompt"] = kwargs[k]

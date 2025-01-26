@@ -69,12 +69,15 @@ def construct_prompt(model: Type[SummeryTube], transcript: str) -> str:
 
 def gen_summary_from_transcript(
     transcript: str,
-    model: str = "gpt-3.5-turbo",
+    model: str = "gpt-4o",
 ) -> str | None:
     settings = Settings()  # pyright: ignore
     client = OpenAI(
-        # This is the default and can be omitted
-        api_key=settings.openai_api_key
+        # # Using OpenAI
+        # api_key=settings.openai_api_key
+        # Using GitHub Models
+        api_key=settings.github_token,
+        base_url="https://models.inference.ai.azure.com",
     )
 
     prompt = construct_prompt(SummeryTube, transcript=transcript)
